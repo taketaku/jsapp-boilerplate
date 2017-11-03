@@ -7,6 +7,9 @@ import { Provider } from "react-redux";
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunkMiddleware from "redux-thunk";
 
+import ApolloClient from "apollo-client-preset";
+import { ApolloProvider } from "react-apollo";
+
 import createHistory from "history/createBrowserHistory";
 import { Route, RouteProps } from "react-router-dom";
 import {
@@ -39,8 +42,11 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     })
   : compose;
 
+const apolloClient = new ApolloClient();
+
 const appReducer = combineReducers({
   ...reducers,
+  apollo: apolloClient,
   router: routerReducer
 });
 
