@@ -1,10 +1,16 @@
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
 
-import { decrement, increment, incrementAsync } from "@src/actions";
+import { decrement, fetchTodos, increment, incrementAsync } from "@src/actions";
 import Counter from "@src/components/Counter";
 import { State } from "@src/types";
 
-const mapStateToProps = (state: State) => ({ value: state.counters.value });
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
+
+const mapStateToProps = (state: State) => ({
+  value: state.counters.value
+});
 
 const mapDispatchToProps = (dispatch: any) => ({
   onDecrementClick: () => dispatch(decrement()),
@@ -12,6 +18,12 @@ const mapDispatchToProps = (dispatch: any) => ({
   onIncrementClickAsync: () => dispatch(incrementAsync())
 });
 
-const ContainedCounter = connect(mapStateToProps, mapDispatchToProps)(Counter);
+const ContainedCounter = graphql(gql`
+  query {
+    todoItems {
+      id
+    }
+  }
+`)(connect(mapStateToProps, mapDispatchToProps)(Counter));
 
 export default ContainedCounter;

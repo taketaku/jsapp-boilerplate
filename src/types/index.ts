@@ -2,13 +2,19 @@ export interface CountersState {
   value: number;
 }
 
+export interface TodosState {
+  value: any;
+}
+
 export interface State {
   counters: CountersState;
+  todos: TodosState;
 }
 
 export enum ActionTypes {
   INCREMENT = "INCREMENT",
-  DECREMENT = "DECREMENT"
+  DECREMENT = "DECREMENT",
+  RECEIVE = "RECEIVE"
 }
 
 export interface IncrementAction {
@@ -21,4 +27,9 @@ export interface DecrementAction {
   value: number;
 }
 
-export type Action = IncrementAction | DecrementAction;
+export interface ReceiveAction {
+  type: ActionTypes.RECEIVE;
+  data: any;
+}
+
+export type Action = IncrementAction | DecrementAction | ReceiveAction;
