@@ -32,6 +32,18 @@ declare global {
   }
 }
 
+import { InMemoryCache } from "apollo-cache-inmemory";
+import { ApolloClient } from "apollo-client";
+import { HttpLink } from "apollo-link-http";
+import { ApolloProvider } from "react-apollo";
+
+const client = new ApolloClient({
+  // By default, this client will send queries to the
+  //  `/graphql` endpoint on the same host
+  cache: new InMemoryCache(),
+  link: new HttpLink({ uri: "http://localhost:8080/graphql" })
+});
+
 // Redux devtools are still enabled in production!
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
   ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
@@ -59,12 +71,14 @@ interface MyRouteProps extends RouteProps {
 class MyRoute extends Route<MyRouteProps> {}
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <div>
-        <MyRoute path="/" component={App} unusedProp="unused" />
-      </div>
-    </ConnectedRouter>
-  </Provider>,
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <div>
+          <MyRoute path="/" component={App} unusedProp="unused" />
+        </div>
+      </ConnectedRouter>
+    </Provider>
+  </ApolloProvider>,
   document.getElementById("root")
 );

@@ -20,10 +20,14 @@
     "d": "webpack-dev-server --progress --colors"
   },
   "dependencies": {
+    "apollo-client-preset": "^1.0.1",
     "emotion": "^8.0.9",
     "emotion-theming": "^8.0.9",
+    "graphql": "^0.11.7",
+    "graphql-tag": "^2.5.0",
     "history": "^4.7.2",
     "react": "^16.0.0",
+    "react-apollo": "^2.0.0",
     "react-dom": "^16.0.0",
     "react-emotion": "^8.0.9",
     "react-redux": "^5.0.6",
@@ -34,11 +38,15 @@
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
+    "@types/graphql": "^0.11.5",
+    "@types/lodash": "^4.14.81",
+    "@types/lodash.flowright": "^3.5.3",
     "@types/react": "^16.0.14",
     "@types/react-dom": "^16.0.1",
     "@types/react-redux": "^5.0.12",
     "@types/react-router-dom": "^4.2.0",
     "@types/react-router-redux": "^5.0.8",
+    "@types/zen-observable": "^0.5.3",
     "autoprefixer": "^7.1.6",
     "awesome-typescript-loader": "^3.3.0",
     "babel-core": "^6.25.0",
