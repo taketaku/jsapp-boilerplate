@@ -5,6 +5,7 @@ export interface CounterProps {
   data: any;
   // onFetchTodos: any;
   onAddTodo: (mutationConfig: any) => void;
+  onDeleteTodo: (mutationConfig: any) => void;
   onIncrementClick: () => void;
   onIncrementClickAsync: () => void;
   onDecrementClick: () => void;
@@ -22,6 +23,19 @@ export default class Counter extends React.Component<CounterProps, {}> {
             })}
         >
           Add a TODO
+        </button>
+
+        <button
+          onClick={() =>
+            this.props.onDeleteTodo({
+              variables: {
+                id: this.props.data.todoItems[
+                  this.props.data.todoItems.length - 1
+                ].id
+              }
+            })}
+        >
+          Delete last TODO
         </button>
 
         <div className="value">{this.props.value}</div>

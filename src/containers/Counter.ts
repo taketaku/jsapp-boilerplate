@@ -5,6 +5,8 @@ import { decrement, fetchTodos, increment, incrementAsync } from "@src/actions";
 import Counter from "@src/components/Counter";
 import { State } from "@src/types";
 
+import { DataProxy } from "apollo-cache";
+import { FetchResult } from "apollo-link";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 
@@ -43,7 +45,10 @@ const addTodoMutation = graphql(
     name: "onAddTodo",
     options: {
       // cache proxy, response from mutation
-      update: (proxy, { data: { addTodo } }) => {
+      update: (
+        proxy: DataProxy,
+        { data: { addTodo } }: FetchResult<{ todoItems: any }>
+      ) => {
         const data: { todoItems: any } = proxy.readQuery({
           query: getTodosQuery
         });
@@ -54,8 +59,41 @@ const addTodoMutation = graphql(
   }
 );
 
-const ContainedCounter = addTodoMutation(
-  getTodos(connect(mapStateToProps, mapDispatchToProps)(Counter))
+const deleteTodoMutation = graphql(
+  gql`
+    mutation deleteTodo($id: Int!) {
+      deleteTodo(id: $id)
+    }
+  `,
+  {
+    name: "onDeleteTodo",
+    options: {
+      update: (proxy: DataProxy, res: any) => {
+        const deletedId = res.data && res.data.deleteTodo;
+
+        if (deletedId != null) {
+          const data: { todoItems: any } = proxy.readQuery({
+            query: getTodosQuery
+          });
+
+          const newItems = data.todoItems.filter(
+            (todo: { id: number }) => todo.id !== deletedId
+          );
+
+          proxy.writeQuery({
+            data: { todoItems: newItems },
+            query: getTodosQuery
+          });
+        }
+      }
+    }
+  }
+);
+
+const ContainedCounter = deleteTodoMutation(
+  addTodoMutation(
+    getTodos(connect(mapStateToProps, mapDispatchToProps)(Counter))
+  )
 );
 
 export default ContainedCounter;

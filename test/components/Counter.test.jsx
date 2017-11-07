@@ -14,6 +14,7 @@ describe("Counter", () => {
         value={0}
         data={{ todoItems: [] }}
         onAddTodo={() => {}}
+        onDeleteTodo={() => {}}
         onIncrementClick={() => {}}
         onIncrementClickAsync={() => {}}
         onDecrementClick={() => {}}
