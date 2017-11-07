@@ -4,6 +4,7 @@ export interface CounterProps {
   value: number;
   data: any;
   // onFetchTodos: any;
+  onAddTodo: (mutationConfig: any) => void;
   onIncrementClick: () => void;
   onIncrementClickAsync: () => void;
   onDecrementClick: () => void;
@@ -14,6 +15,14 @@ export default class Counter extends React.Component<CounterProps, {}> {
     return (
       <div>
         <div>todoItems: {JSON.stringify(this.props.data.todoItems)}</div>
+        <button
+          onClick={() =>
+            this.props.onAddTodo({
+              variables: { title: new Date().toISOString(), completed: false }
+            })}
+        >
+          Add a TODO
+        </button>
 
         <div className="value">{this.props.value}</div>
         <button className="increment" onClick={this.props.onIncrementClick}>

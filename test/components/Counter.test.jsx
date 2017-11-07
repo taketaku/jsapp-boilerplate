@@ -12,6 +12,8 @@ describe("Counter", () => {
     render = shallow(
       <Counter
         value={0}
+        data={{ todoItems: [] }}
+        onAddTodo={() => {}}
         onIncrementClick={() => {}}
         onIncrementClickAsync={() => {}}
         onDecrementClick={() => {}}

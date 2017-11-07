@@ -18,12 +18,44 @@ const mapDispatchToProps = (dispatch: any) => ({
   onIncrementClickAsync: () => dispatch(incrementAsync())
 });
 
-const ContainedCounter = graphql(gql`
+const getTodosQuery = gql`
   query {
     todoItems {
       id
+      title
+      completed
     }
   }
-`)(connect(mapStateToProps, mapDispatchToProps)(Counter));
+`;
+const getTodos = graphql(getTodosQuery);
+
+const addTodoMutation = graphql(
+  gql`
+    mutation addTodo($title: String!, $completed: Boolean!) {
+      addTodo(title: $title, completed: $completed) {
+        id
+        title
+        completed
+      }
+    }
+  `,
+  {
+    name: "onAddTodo",
+    options: {
+      // cache proxy, response from mutation
+      update: (proxy, { data: { addTodo } }) => {
+        const data: { todoItems: any } = proxy.readQuery({
+          query: getTodosQuery
+        });
+        data.todoItems.push(addTodo);
+        proxy.writeQuery({ query: getTodosQuery, data });
+      }
+    }
+  }
+);
+
+const ContainedCounter = addTodoMutation(
+  getTodos(connect(mapStateToProps, mapDispatchToProps)(Counter))
+);
 
 export default ContainedCounter;
